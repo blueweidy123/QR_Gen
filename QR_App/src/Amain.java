@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -35,7 +34,11 @@ public class Amain implements ActionListener{
 	static String qrCodeText;
 	static String fileType = "png";
 	static int size = 250;
-	static File qrFile = new File("D:/file test java/qrSave/QRoutput.png");
+	
+	String filePath = "D:/QR_Save";
+	//static File qrFile = new File("D:/file test java/qrSave/QRoutput.png");
+	static File qrFile = new File("D:/QR_Save/QRoutput.png");
+	String readPath = "D:/QR_Save/QRoutput.png";
 	
 	public Amain() {
 		stringtext.setBounds(135, 14, 250, 20);
@@ -56,6 +59,7 @@ public class Amain implements ActionListener{
 		fr.setLocationRelativeTo(null);
 		fr.setResizable(false);
 		fr.setVisible(true);
+		writeFile(filePath);
 	}
 	
 	public static void main(String[] args) throws WriterException, IOException {
@@ -93,10 +97,18 @@ public class Amain implements ActionListener{
 		
 	}
 	
-	
+	public void writeFile(String value) {
+		File savePos = new File(value);
+		if (savePos.exists()) {
+			System.out.println("Save Location Checked!");
+		}else {
+			File savePosition = new File(value); 
+			System.out.print("created folder " + "QR_Save");
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
+		}
+	}
+
+	public void createAndShow(ActionEvent e) {
 		if(e.getSource() == gen) {
 			qrCodeText = stringtext.getText();
 			if(stringtext.getText() == null) {
@@ -104,6 +116,7 @@ public class Amain implements ActionListener{
 			}
 			try {
 				creQRI(qrFile, qrCodeText, size, fileType);
+				System.out.println(qrCodeText);
 			} catch (WriterException e1) {
 				e1.printStackTrace();
 				JOptionPane.showMessageDialog(null, "TEXT ENTERED ERROR");
@@ -114,11 +127,10 @@ public class Amain implements ActionListener{
 			}
 			
 			
-			
 		JFrame show = new JFrame("QR Code");
 		JPanel pn = new JPanel();
 		try {
-			final BufferedImage img = ImageIO.read(new File("D:/file test java/qrSave/QRoutput.png"));
+			final BufferedImage img = ImageIO.read(new File(readPath));
 			JLabel lb = new JLabel(new ImageIcon(img));
 			pn.add(lb);
 		} catch (IOException e1) {
@@ -133,9 +145,12 @@ public class Amain implements ActionListener{
 		show.setLocationRelativeTo(fr);
 		show.setVisible(true);
 		
-		
-		
 		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+			createAndShow(e);
 		
 	}
 
